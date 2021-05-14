@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dragtime/models/lightStep.dart';
 import 'package:dragtime/views/playScreen.dart';
 import 'package:flutter/material.dart';
@@ -46,10 +48,14 @@ class MainMenu extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return Card(
                       elevation: 5,
-                      child: ListTile(
-                        leading: Text('${lightSteps[index].ID}'),
-                        title: Text('${lightSteps[index].ID}'),
-                        tileColor: Colors.amber,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40.0)),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(40.0),
+                        child: ListTile(
+                          title: Text('${lightSteps[index].ID}'),
+                          tileColor: lightSteps[index].colore,
+                        ),
                       ),
                     );
                   },
