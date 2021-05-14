@@ -31,6 +31,54 @@ class MainMenu extends StatelessWidget {
     LightStep(2, Colors.yellow, 10),
     LightStep(3, Colors.green, 25),
   ];
+
+  Widget buildBottomSheet(BuildContext context) {
+    return Container(
+      height: 300,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Card(
+              elevation: 5,
+              child: TextField(
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(hintText: 'sequence number'),
+              ),
+            ),
+            Card(
+                elevation: 5,
+                child: Container(
+                  width: 500,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: SwitchListTile(
+                          value: true,
+                          onChanged: null,
+                        ),
+                      ),
+                      Flexible(
+                        child: SwitchListTile(
+                          value: true,
+                          onChanged: null,
+                        ),
+                      ),
+                      Flexible(
+                        child: SwitchListTile(
+                          value: false,
+                          onChanged: null,
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -68,7 +116,20 @@ class MainMenu extends StatelessWidget {
               child: Container(
                 width: double.infinity,
                 color: Colors.blue,
-                child: Text('button to the right placeholder'),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FloatingActionButton(
+                      child: Icon(Icons.add),
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: buildBottomSheet,
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
