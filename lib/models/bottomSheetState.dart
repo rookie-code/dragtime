@@ -7,7 +7,10 @@ class BottomSheetState with ChangeNotifier {
   bool greenState;
   bool yellowState;
   int timer;
-  List<LightStep> lightSteps = [];
+  List<LightStep> lightSteps = [
+    LightStep(1, Colors.green, 2),
+    LightStep(2, Colors.yellow, 2),
+  ];
 
   int get lightStepLength {
     return lightSteps.length;

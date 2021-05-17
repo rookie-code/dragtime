@@ -1,5 +1,6 @@
 import 'package:dragtime/models/lightStep.dart';
 import 'package:dragtime/models/bottomSheetState.dart';
+import 'package:dragtime/models/lightStepState.dart';
 import 'package:dragtime/views/playScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => BottomSheetState()),
+        ChangeNotifierProvider(create: (context) => LightStepState()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -122,6 +124,11 @@ class _MainMenuState extends State<MainMenu> {
                     FloatingActionButton(
                       child: Icon(Icons.play_arrow_rounded),
                       onPressed: () {
+                        Provider.of<LightStepState>(context, listen: false)
+                            .initLightStepState(Provider.of<BottomSheetState>(
+                                    context,
+                                    listen: false)
+                                .lightSteps);
                         Navigator.pushNamed(context, PlayScreen.page);
                       },
                     ),

@@ -1,6 +1,9 @@
 import 'package:circular_countdown/circular_countdown.dart';
+import 'package:dragtime/models/bottomSheetState.dart';
+import 'package:dragtime/models/lightStepState.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class PlayScreen extends StatefulWidget {
   static const page = '/playScreen';
@@ -12,16 +15,13 @@ class PlayScreen extends StatefulWidget {
 
 class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
   AnimationController circleController;
-  int status = 0;
-  Color actualColor = Colors.lightGreenAccent[400];
-  double counterMin = 25.0;
 
   @override
   void initState() {
     super.initState();
 
     circleController = AnimationController(
-      duration: Duration(seconds: 60),
+      duration: Duration(seconds: 5),
       vsync: this,
       upperBound: 60.0,
       lowerBound: 0.0,
@@ -30,10 +30,7 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
     circleController.addStatusListener((listener) {
       if (listener == AnimationStatus.completed) {
         circleController.value = 0.0;
-        --counterMin;
-        if (counterMin <= 0) {
-          switchColorTimer();
-        }
+        Provider.of<LightStepState>(context, listen: false).countDownTimer();
         circleController.forward();
       }
     });
@@ -45,46 +42,20 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
     circleController.forward();
   }
 
-  void switchColorTimer() {
-    switch (status) {
-      case 0:
-        status = 1;
-        actualColor = Colors.yellowAccent[400];
-        counterMin = 11.0;
-        circleController.forward(from: 60);
-        setState(() {});
-        break;
-
-      case 1:
-        status = 2;
-        actualColor = Colors.redAccent;
-        counterMin = 26.0;
-        circleController.forward(from: 60);
-        setState(() {});
-        break;
-
-      case 2:
-        status = 0;
-        actualColor = Colors.lightGreenAccent[400];
-        counterMin = 26.0;
-        circleController.forward(from: 60);
-        setState(() {});
-        break;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Scaffold(
-          backgroundColor: actualColor,
+          backgroundColor:
+              Provider.of<LightStepState>(context, listen: false).actualColor,
           body: Column(
             children: <Widget>[
               Expanded(
                 child: CircularCountdown(
                   textSpan: TextSpan(
-                    text: '${counterMin.toInt().toString()}',
+                    text:
+                        '${Provider.of<LightStepState>(context, listen: false).actualTimer.toString()}',
                     style: TextStyle(
                       backgroundColor: null,
                       fontSize: 500,
@@ -137,16 +108,9 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
                         RawKeyEventDataAndroid rawKeyEventDataAndroid =
                             rawKeyDownEvent.data;
                         if (rawKeyEventDataAndroid.keyCode == 23) {
-                          counterMin = counterMin + 2;
-                          if (status == 0 || status == 2) {
-                            if (counterMin >= 26) {
-                              counterMin = 26;
-                            }
-                          }
-                          if (status == 1 && counterMin >= 11) {
-                            counterMin = 11;
-                          }
                           circleController.forward(from: 60);
+                          Provider.of<LightStepState>(context, listen: false)
+                              .forwardTimer();
                           setState(() {});
                         }
                       }
@@ -155,16 +119,9 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
                         focusColor: Colors.black,
                         child: Icon(Icons.add),
                         onPressed: () {
-                          counterMin = counterMin + 2;
-                          if (status == 0 || status == 2) {
-                            if (counterMin >= 26) {
-                              counterMin = 26;
-                            }
-                          }
-                          if (status == 1 && counterMin >= 11) {
-                            counterMin = 11;
-                          }
                           circleController.forward(from: 60);
+                          Provider.of<LightStepState>(context, listen: false)
+                              .forwardTimer();
                           setState(() {});
                         }),
                   ),
@@ -180,7 +137,8 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
                         RawKeyEventDataAndroid rawKeyEventDataAndroid =
                             rawKeyDownEvent.data;
                         if (rawKeyEventDataAndroid.keyCode == 23) {
-                          switchColorTimer();
+                          Provider.of<LightStepState>(context, listen: false)
+                              .changeFase();
                         }
                       }
                     },
@@ -188,7 +146,8 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
                       focusColor: Colors.black,
                       child: Icon(Icons.screen_share),
                       onPressed: () {
-                        switchColorTimer();
+                        Provider.of<LightStepState>(context, listen: false)
+                            .changeFase();
                       },
                     ),
                   ),
