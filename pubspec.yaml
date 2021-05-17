@@ -14,6 +14,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   circular_countdown: ^0.1.0
   focusnode_widgets: ^0.0.9
+  provider: ^5.0.0
 
 dev_dependencies:
   flutter_test:
