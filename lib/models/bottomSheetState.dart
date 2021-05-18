@@ -7,10 +7,7 @@ class BottomSheetState with ChangeNotifier {
   bool greenState;
   bool yellowState;
   int timer;
-  List<LightStep> lightSteps = [
-    LightStep(1, Colors.green, 2),
-    LightStep(2, Colors.yellow, 2),
-  ];
+  List<LightStep> lightSteps = [];
 
   int get lightStepLength {
     return lightSteps.length;
@@ -46,10 +43,10 @@ class BottomSheetState with ChangeNotifier {
     notifyListeners();
   }
 
-  Color get actualColorStep {
-    if (redState) return Colors.red;
-    if (yellowState) return Colors.yellow;
-    if (greenState) return Colors.green;
+  int get actualColorStep {
+    if (redState) return Colors.red.value;
+    if (yellowState) return Colors.yellow.value;
+    if (greenState) return Colors.green.value;
   }
 
   LightStep get bottomSheetResult {
@@ -70,5 +67,9 @@ class BottomSheetState with ChangeNotifier {
   void addLightStep(LightStep _lightStep) {
     lightSteps.add(_lightStep);
     notifyListeners();
+  }
+
+  void setLightSteps(List<LightStep> _listLight) {
+    lightSteps = _listLight;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:circular_countdown/circular_countdown.dart';
+import 'package:dragtime/main.dart';
 import 'package:dragtime/models/bottomSheetState.dart';
 import 'package:dragtime/models/lightStepState.dart';
 import 'package:flutter/material.dart';
@@ -42,13 +43,17 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
     circleController.forward();
   }
 
+  void disposeController() {
+    circleController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Scaffold(
-          backgroundColor:
-              Provider.of<LightStepState>(context, listen: false).actualColor,
+          backgroundColor: Color(
+              Provider.of<LightStepState>(context, listen: false).actualColor),
           body: Column(
             children: <Widget>[
               Expanded(
@@ -88,6 +93,7 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
                       }
                     },
                     child: FloatingActionButton(
+                      heroTag: 'less',
                       focusColor: Colors.black,
                       onPressed: () {
                         circleController.forward(from: 60);
@@ -116,6 +122,7 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
                       }
                     },
                     child: FloatingActionButton(
+                        heroTag: 'add',
                         focusColor: Colors.black,
                         child: Icon(Icons.add),
                         onPressed: () {
@@ -143,6 +150,7 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
                       }
                     },
                     child: FloatingActionButton(
+                      heroTag: 'changeScreen',
                       focusColor: Colors.black,
                       child: Icon(Icons.screen_share),
                       onPressed: () {
@@ -153,6 +161,30 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
                   ),
                   SizedBox(
                     width: 20,
+                  ),
+                  // pulsante per tornare alla pagina principale
+                  RawKeyboardListener(
+                    focusNode: FocusNode(),
+                    onKey: (RawKeyEvent event) {
+                      if (event is RawKeyDownEvent &&
+                          event.data is RawKeyEventDataAndroid) {
+                        RawKeyDownEvent rawKeyDownEvent = event;
+                        RawKeyEventDataAndroid rawKeyEventDataAndroid =
+                            rawKeyDownEvent.data;
+                        if (rawKeyEventDataAndroid.keyCode == 23) {
+                          disposeController();
+                          Navigator.pushNamed(context, MainMenu.page);
+                        }
+                      }
+                    },
+                    child: FloatingActionButton(
+                        focusColor: Colors.black,
+                        heroTag: 'backHome',
+                        child: Icon(Icons.home),
+                        onPressed: () {
+                          disposeController();
+                          Navigator.pushNamed(context, MainMenu.page);
+                        }),
                   ),
                 ],
               ),
