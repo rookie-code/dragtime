@@ -30,6 +30,9 @@ class MainBottomSheet extends StatelessWidget {
             children: [
               Row(
                 children: [
+                  SizedBox(
+                    width: 10,
+                  ),
                   RawKeyboardListener(
                     focusNode: FocusNode(),
                     onKey: (RawKeyEvent event) {
@@ -45,7 +48,8 @@ class MainBottomSheet extends StatelessWidget {
                       }
                     },
                     child: FloatingActionButton(
-                      focusNode: FocusNode(),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5))),
                       focusColor: Colors.black,
                       onPressed: () {
                         Provider.of<BottomSheetState>(context, listen: false)
@@ -80,7 +84,8 @@ class MainBottomSheet extends StatelessWidget {
                       }
                     },
                     child: FloatingActionButton(
-                      focusNode: FocusNode(),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5))),
                       focusColor: Colors.black,
                       child: Icon(Icons.arrow_circle_down),
                       onPressed: () {
@@ -117,20 +122,31 @@ class MainBottomSheet extends StatelessWidget {
                           Provider.of<BottomSheetState>(context, listen: false)
                               .bottomSheetResult);
                       callback();
+                      Provider.of<BottomSheetState>(context, listen: false)
+                          .setTimer(0);
                       Navigator.pop(context);
                     }
                   }
                 },
-                child: FloatingActionButton(
-                  child: Text('Add'),
-                  focusColor: Colors.black,
-                  onPressed: () {
-                    lightSteps.add(
-                        Provider.of<BottomSheetState>(context, listen: false)
-                            .bottomSheetResult);
-                    callback();
-                    Navigator.pop(context);
-                  },
+                child: Container(
+                  width: 100,
+                  margin: EdgeInsets.only(right: 10),
+                  child: FloatingActionButton(
+                    child: Text('Add'),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    focusColor: Colors.black,
+                    onPressed: () {
+                      lightSteps.add(
+                          Provider.of<BottomSheetState>(context, listen: false)
+                              .bottomSheetResult);
+
+                      callback();
+                      Provider.of<BottomSheetState>(context, listen: false)
+                          .setTimer(0);
+                      Navigator.pop(context);
+                    },
+                  ),
                 ),
               ),
               RawKeyboardListener(
@@ -146,11 +162,17 @@ class MainBottomSheet extends StatelessWidget {
                     }
                   }
                 },
-                child: FloatingActionButton(
-                  focusNode: FocusNode(),
-                  focusColor: Colors.black,
-                  child: Text('Cancell'),
-                  onPressed: () => Navigator.pop(context),
+                child: Container(
+                  width: 100,
+                  margin: EdgeInsets.only(right: 20),
+                  child: FloatingActionButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    focusNode: FocusNode(),
+                    focusColor: Colors.black,
+                    child: Text('Cancell'),
+                    onPressed: () => Navigator.pop(context),
+                  ),
                 ),
               ),
             ],
