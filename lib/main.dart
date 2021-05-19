@@ -5,6 +5,7 @@ import 'package:dragtime/models/bottomSheetState.dart';
 import 'package:dragtime/models/lightStepState.dart';
 import 'package:dragtime/views/playScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:dragtime/widgets/mainBottomSheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -88,6 +89,7 @@ class _MainMenuState extends State<MainMenu> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.blue,
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -134,43 +136,107 @@ class _MainMenuState extends State<MainMenu> {
               ),
             ),
             Expanded(
-              flex: 1,
+              flex: 2,
               child: Container(
                 width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(50),
+                    topRight: Radius.circular(50),
+                  ),
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    FloatingActionButton(
-                      heroTag: 'addLight',
-                      child: Icon(Icons.add),
-                      onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: buildNewBottomSheet,
-                        );
+                    RawKeyboardListener(
+                      focusNode: FocusNode(),
+                      onKey: (RawKeyEvent event) {
+                        if (event is RawKeyDownEvent &&
+                            event.data is RawKeyEventDataAndroid) {
+                          RawKeyDownEvent rawKeyDownEvent = event;
+                          RawKeyEventDataAndroid rawKeyEventDataAndroid =
+                              rawKeyDownEvent.data;
+                          if (rawKeyEventDataAndroid.keyCode == 23) {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: buildNewBottomSheet,
+                            );
+                          }
+                        }
                       },
+                      child: FloatingActionButton(
+                        focusColor: Colors.black,
+                        heroTag: 'addLight',
+                        child: Icon(Icons.add),
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: buildNewBottomSheet,
+                          );
+                        },
+                      ),
                     ),
-                    FloatingActionButton(
-                      heroTag: 'reset',
-                      child: Icon(Icons.restore_sharp),
-                      onPressed: () {
-                        Provider.of<BottomSheetState>(context, listen: false)
-                            .resetLightSteps();
-                        saveData();
-                        setState(() {});
-                      },
-                    ),
-                    FloatingActionButton(
-                      heroTag: 'play',
-                      child: Icon(Icons.play_arrow_rounded),
-                      onPressed: () {
-                        Provider.of<LightStepState>(context, listen: false)
-                            .initLightStepState(Provider.of<BottomSheetState>(
-                                    context,
+                    RawKeyboardListener(
+                      focusNode: FocusNode(),
+                      onKey: (RawKeyEvent event) {
+                        if (event is RawKeyDownEvent &&
+                            event.data is RawKeyEventDataAndroid) {
+                          RawKeyDownEvent rawKeyDownEvent = event;
+                          RawKeyEventDataAndroid rawKeyEventDataAndroid =
+                              rawKeyDownEvent.data;
+                          if (rawKeyEventDataAndroid.keyCode == 23) {
+                            Provider.of<BottomSheetState>(context,
                                     listen: false)
-                                .lightSteps);
-                        Navigator.pushNamed(context, PlayScreen.page);
+                                .resetLightSteps();
+                            saveData();
+                            setState(() {});
+                          }
+                        }
                       },
+                      child: FloatingActionButton(
+                        focusColor: Colors.black,
+                        heroTag: 'reset',
+                        child: Icon(Icons.restore_sharp),
+                        onPressed: () {
+                          Provider.of<BottomSheetState>(context, listen: false)
+                              .resetLightSteps();
+                          saveData();
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                    RawKeyboardListener(
+                      focusNode: FocusNode(),
+                      onKey: (RawKeyEvent event) {
+                        if (event is RawKeyDownEvent &&
+                            event.data is RawKeyEventDataAndroid) {
+                          RawKeyDownEvent rawKeyDownEvent = event;
+                          RawKeyEventDataAndroid rawKeyEventDataAndroid =
+                              rawKeyDownEvent.data;
+                          if (rawKeyEventDataAndroid.keyCode == 23) {
+                            Provider.of<LightStepState>(context, listen: false)
+                                .initLightStepState(
+                                    Provider.of<BottomSheetState>(context,
+                                            listen: false)
+                                        .lightSteps);
+                            Navigator.pushNamed(context, PlayScreen.page);
+                          }
+                        }
+                      },
+                      child: FloatingActionButton(
+                        focusColor: Colors.black,
+                        heroTag: 'play',
+                        child: Icon(Icons.play_arrow_rounded),
+                        onPressed: () {
+                          Provider.of<LightStepState>(context, listen: false)
+                              .initLightStepState(Provider.of<BottomSheetState>(
+                                      context,
+                                      listen: false)
+                                  .lightSteps);
+                          Navigator.pushNamed(context, PlayScreen.page);
+                        },
+                      ),
                     ),
                   ],
                 ),

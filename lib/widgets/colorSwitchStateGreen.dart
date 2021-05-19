@@ -1,5 +1,6 @@
 import 'package:dragtime/models/bottomSheetState.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class ColorSwitchGreen extends StatelessWidget {
@@ -18,14 +19,29 @@ class ColorSwitchGreen extends StatelessWidget {
         ),
         Container(
           width: 100,
-          child: SwitchListTile(
-            activeColor: Colors.green,
-            inactiveTrackColor: Colors.grey,
-            value: _actualState,
-            onChanged: (bool val) {
-              Provider.of<BottomSheetState>(context, listen: false)
-                  .changeToGreenState(val);
+          child: RawKeyboardListener(
+            focusNode: FocusNode(),
+            onKey: (RawKeyEvent event) {
+              if (event is RawKeyDownEvent &&
+                  event.data is RawKeyEventDataAndroid) {
+                RawKeyDownEvent rawKeyDownEvent = event;
+                RawKeyEventDataAndroid rawKeyEventDataAndroid =
+                    rawKeyDownEvent.data;
+                if (rawKeyEventDataAndroid.keyCode == 23) {
+                  Provider.of<BottomSheetState>(context, listen: false)
+                      .changeToGreenState();
+                }
+              }
             },
+            child: SwitchListTile(
+              activeColor: Colors.green,
+              inactiveTrackColor: Colors.grey,
+              value: _actualState,
+              onChanged: (bool val) {
+                Provider.of<BottomSheetState>(context, listen: false)
+                    .changeToGreenState();
+              },
+            ),
           ),
         ),
       ],

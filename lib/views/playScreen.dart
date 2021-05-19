@@ -22,7 +22,7 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
     super.initState();
 
     circleController = AnimationController(
-      duration: Duration(seconds: 5),
+      duration: Duration(seconds: 60),
       vsync: this,
       upperBound: 60.0,
       lowerBound: 0.0,
@@ -103,7 +103,7 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
                     ),
                   ),
                   SizedBox(
-                    width: 20,
+                    width: 10,
                   ),
                   RawKeyboardListener(
                     focusNode: FocusNode(),
@@ -133,7 +133,7 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
                         }),
                   ),
                   SizedBox(
-                    width: 20,
+                    width: 10,
                   ),
                   RawKeyboardListener(
                     focusNode: FocusNode(),
@@ -160,7 +160,7 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
                     ),
                   ),
                   SizedBox(
-                    width: 20,
+                    width: 10,
                   ),
                   // pulsante per tornare alla pagina principale
                   RawKeyboardListener(

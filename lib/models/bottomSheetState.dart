@@ -6,7 +6,7 @@ class BottomSheetState with ChangeNotifier {
   bool redState;
   bool greenState;
   bool yellowState;
-  int timer;
+  int timer = 0;
   List<LightStep> lightSteps = [];
 
   int get lightStepLength {
@@ -22,24 +22,24 @@ class BottomSheetState with ChangeNotifier {
     return this.lightStepLength + 1;
   }
 
-  void changeToRedState(bool val) {
-    redState = val;
+  void changeToRedState() {
+    redState = !redState;
     greenState = false;
     yellowState = false;
     notifyListeners();
   }
 
-  void changeToGreenState(bool val) {
+  void changeToGreenState() {
     redState = false;
-    greenState = val;
+    greenState = !greenState;
     yellowState = false;
     notifyListeners();
   }
 
-  void changeToYellowState(bool val) {
+  void changeToYellowState() {
     redState = false;
     greenState = false;
-    yellowState = val;
+    yellowState = !yellowState;
     notifyListeners();
   }
 
@@ -61,6 +61,19 @@ class BottomSheetState with ChangeNotifier {
 
   void setTimer(int _timer) {
     timer = _timer;
+    notifyListeners();
+  }
+
+  void timerAddOne() {
+    timer++;
+    notifyListeners();
+  }
+
+  void timerRemoveOne() {
+    timer--;
+    if (timer <= 0) {
+      timer = 0;
+    }
     notifyListeners();
   }
 

@@ -4,11 +4,11 @@ import 'package:dragtime/widgets/colorSwitchStateGreen.dart';
 import 'package:dragtime/widgets/colorSwitchStateRed.dart';
 import 'package:dragtime/widgets/colorSwitchStateYellow.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MainBottomSheet extends StatelessWidget {
-  const MainBottomSheet({
+  MainBottomSheet({
     Key key,
     @required this.lightSteps,
     @required this.callback,
@@ -20,66 +20,142 @@ class MainBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Card(
-              elevation: 5,
-              child: Container(
-                width: 500,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ColorSwitchRed(),
-                    ColorSwitchYellow(),
-                    ColorSwitchGreen(),
-                  ],
-                ),
-              ),
-            ),
-            Card(
-              elevation: 5,
-              child: Container(
-                width: 500,
-                child: TextField(
-                  textAlign: TextAlign.center,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    hintText: 'insert timer',
-                  ),
-                  onChanged: (tempTimer) =>
-                      Provider.of<BottomSheetState>(context, listen: false)
-                          .timer = int.parse(tempTimer),
-                ),
-              ),
-            ),
-            Container(
-              width: 500,
-              child: Card(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      child: Text('Add'),
+      height: 150,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                children: [
+                  RawKeyboardListener(
+                    focusNode: FocusNode(),
+                    onKey: (RawKeyEvent event) {
+                      if (event is RawKeyDownEvent &&
+                          event.data is RawKeyEventDataAndroid) {
+                        RawKeyDownEvent rawKeyDownEvent = event;
+                        RawKeyEventDataAndroid rawKeyEventDataAndroid =
+                            rawKeyDownEvent.data;
+                        if (rawKeyEventDataAndroid.keyCode == 23) {
+                          Provider.of<BottomSheetState>(context, listen: false)
+                              .timerAddOne();
+                        }
+                      }
+                    },
+                    child: FloatingActionButton(
+                      focusNode: FocusNode(),
+                      focusColor: Colors.black,
                       onPressed: () {
-                        lightSteps.add(Provider.of<BottomSheetState>(context,
-                                listen: false)
-                            .bottomSheetResult);
-                        callback();
-                        Navigator.pop(context);
+                        Provider.of<BottomSheetState>(context, listen: false)
+                            .timerAddOne();
+                      },
+                      child: Icon(Icons.arrow_circle_up),
+                    ),
+                  ),
+                  Container(
+                    width: 50,
+                    height: 50,
+                    child: Card(
+                      elevation: 1,
+                      child: Center(
+                          child: Text(Provider.of<BottomSheetState>(context)
+                              .timer
+                              .toString())),
+                    ),
+                  ),
+                  RawKeyboardListener(
+                    focusNode: FocusNode(),
+                    onKey: (RawKeyEvent event) {
+                      if (event is RawKeyDownEvent &&
+                          event.data is RawKeyEventDataAndroid) {
+                        RawKeyDownEvent rawKeyDownEvent = event;
+                        RawKeyEventDataAndroid rawKeyEventDataAndroid =
+                            rawKeyDownEvent.data;
+                        if (rawKeyEventDataAndroid.keyCode == 23) {
+                          Provider.of<BottomSheetState>(context, listen: false)
+                              .timerRemoveOne();
+                        }
+                      }
+                    },
+                    child: FloatingActionButton(
+                      focusNode: FocusNode(),
+                      focusColor: Colors.black,
+                      child: Icon(Icons.arrow_circle_down),
+                      onPressed: () {
+                        Provider.of<BottomSheetState>(context, listen: false)
+                            .timerRemoveOne();
                       },
                     ),
-                    ElevatedButton(
-                      child: Text('Cancell'),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ],
+                  )
+                ],
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ColorSwitchRed(),
+              ColorSwitchYellow(),
+              ColorSwitchGreen(),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              RawKeyboardListener(
+                focusNode: FocusNode(),
+                onKey: (RawKeyEvent event) {
+                  if (event is RawKeyDownEvent &&
+                      event.data is RawKeyEventDataAndroid) {
+                    RawKeyDownEvent rawKeyDownEvent = event;
+                    RawKeyEventDataAndroid rawKeyEventDataAndroid =
+                        rawKeyDownEvent.data;
+                    if (rawKeyEventDataAndroid.keyCode == 23) {
+                      lightSteps.add(
+                          Provider.of<BottomSheetState>(context, listen: false)
+                              .bottomSheetResult);
+                      callback();
+                      Navigator.pop(context);
+                    }
+                  }
+                },
+                child: FloatingActionButton(
+                  child: Text('Add'),
+                  focusColor: Colors.black,
+                  onPressed: () {
+                    lightSteps.add(
+                        Provider.of<BottomSheetState>(context, listen: false)
+                            .bottomSheetResult);
+                    callback();
+                    Navigator.pop(context);
+                  },
                 ),
               ),
-            ),
-          ],
-        ),
+              RawKeyboardListener(
+                focusNode: FocusNode(),
+                onKey: (RawKeyEvent event) {
+                  if (event is RawKeyDownEvent &&
+                      event.data is RawKeyEventDataAndroid) {
+                    RawKeyDownEvent rawKeyDownEvent = event;
+                    RawKeyEventDataAndroid rawKeyEventDataAndroid =
+                        rawKeyDownEvent.data;
+                    if (rawKeyEventDataAndroid.keyCode == 23) {
+                      Navigator.pop(context);
+                    }
+                  }
+                },
+                child: FloatingActionButton(
+                  focusNode: FocusNode(),
+                  focusColor: Colors.black,
+                  child: Text('Cancell'),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
