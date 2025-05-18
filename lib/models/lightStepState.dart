@@ -2,10 +2,10 @@ import 'package:dragtime/models/lightStep.dart';
 import 'package:flutter/cupertino.dart';
 
 class LightStepState with ChangeNotifier {
-  int actualColor;
-  int actualTimer;
+  late int actualColor;
+  late int actualTimer;
   List<LightStep> lightList = [];
-  LightStep actualLightStep;
+  late LightStep actualLightStep;
   int lightIndex = 0;
 
   void initLightStepState(List<LightStep> _lightList) {

@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class LightStep {
   int id;
   int colore;
@@ -7,11 +5,10 @@ class LightStep {
 
   LightStep(this.id, this.colore, this.time);
 
-  LightStep.fromMap(Map map) {
-    this.id = map['id'];
-    this.colore = map['colore'];
-    this.time = map['time'];
-  }
+  LightStep.fromMap(Map map)
+      : id = map['id'],
+        colore = map['colore'],
+        time = map['time'];
   Map toMap() {
     return {
       'id': this.id,

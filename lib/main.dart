@@ -44,7 +44,7 @@ class MainMenu extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MainMenu> {
-  SharedPreferences sharedPreferences;
+  late SharedPreferences sharedPreferences;
   @override
   void initState() {
     initSharedPreferences();
@@ -66,10 +66,12 @@ class _MainMenuState extends State<MainMenu> {
   }
 
   void loadData() {
-    List<String> spList = sharedPreferences.getStringList('lightList');
-    Provider.of<BottomSheetState>(context, listen: false).setLightSteps(
-        spList.map((item) => LightStep.fromMap(json.decode(item))).toList());
-    setState(() {});
+    List<String>? spList = sharedPreferences.getStringList('lightList');
+    if (spList != null) {
+      Provider.of<BottomSheetState>(context, listen: false).setLightSteps(
+          spList.map((item) => LightStep.fromMap(json.decode(item))).toList());
+      setState(() {});
+    }
   }
 
   void refrashMainPage() {
@@ -77,11 +79,25 @@ class _MainMenuState extends State<MainMenu> {
     setState(() {});
   }
 
-  Widget buildNewBottomSheet(BuildContext context) {
+  Widget buildNewBottomSheet(
+    BuildContext context,
+  ) {
     return MainBottomSheet(
       lightSteps:
           Provider.of<BottomSheetState>(context, listen: false).lightSteps,
       callback: refrashMainPage,
+    );
+  }
+
+  Widget updateBottomSheet(
+    BuildContext context,
+    int index,
+  ) {
+    return MainBottomSheet(
+      lightSteps:
+          Provider.of<BottomSheetState>(context, listen: false).lightSteps,
+      callback: refrashMainPage,
+      index: index,
     );
   }
 
@@ -123,7 +139,13 @@ class _MainMenuState extends State<MainMenu> {
                                 title: Text(
                                     'Timer: ${Provider.of<BottomSheetState>(context, listen: false).lightSteps[index].time} min'),
                                 tileColor: Colors.white,
-                                onTap: () => print('modify this element'),
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (context) =>
+                                        updateBottomSheet(context, index),
+                                  );
+                                },
                               ),
                             ),
                           );
@@ -149,93 +171,107 @@ class _MainMenuState extends State<MainMenu> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    RawKeyboardListener(
-                      focusNode: FocusNode(),
-                      onKey: (RawKeyEvent event) {
-                        if (event is RawKeyDownEvent &&
-                            event.data is RawKeyEventDataAndroid) {
-                          RawKeyDownEvent rawKeyDownEvent = event;
-                          RawKeyEventDataAndroid rawKeyEventDataAndroid =
-                              rawKeyDownEvent.data;
-                          if (rawKeyEventDataAndroid.keyCode == 23) {
-                            showModalBottomSheet(
-                              context: context,
-                              builder: buildNewBottomSheet,
-                            );
-                          }
-                        }
-                      },
-                      child: FloatingActionButton(
-                        focusColor: Colors.black,
-                        heroTag: 'addLight',
-                        child: Icon(Icons.add),
-                        onPressed: () {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: buildNewBottomSheet,
-                          );
+                    Focus(
+                      child: Shortcuts(
+                        shortcuts: <LogicalKeySet, Intent>{
+                          LogicalKeySet(LogicalKeyboardKey.enter):
+                              const ActivateIntent(),
                         },
+                        child: Actions(
+                          actions: <Type, Action<Intent>>{
+                            ActivateIntent: CallbackAction<ActivateIntent>(
+                              onInvoke: (ActivateIntent intent) {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: buildNewBottomSheet,
+                                );
+                                return null;
+                              },
+                            ),
+                          },
+                          child: FloatingActionButton(
+                            focusColor: Colors.black,
+                            heroTag: 'addLight',
+                            child: Icon(Icons.add),
+                            onPressed: () {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: buildNewBottomSheet,
+                              );
+                            },
+                          ),
+                        ),
                       ),
                     ),
-                    RawKeyboardListener(
-                      focusNode: FocusNode(),
-                      onKey: (RawKeyEvent event) {
-                        if (event is RawKeyDownEvent &&
-                            event.data is RawKeyEventDataAndroid) {
-                          RawKeyDownEvent rawKeyDownEvent = event;
-                          RawKeyEventDataAndroid rawKeyEventDataAndroid =
-                              rawKeyDownEvent.data;
-                          if (rawKeyEventDataAndroid.keyCode == 23) {
-                            Provider.of<BottomSheetState>(context,
-                                    listen: false)
-                                .resetLightSteps();
-                            saveData();
-                            setState(() {});
-                          }
-                        }
-                      },
-                      child: FloatingActionButton(
-                        focusColor: Colors.black,
-                        heroTag: 'reset',
-                        child: Icon(Icons.restore_sharp),
-                        onPressed: () {
-                          Provider.of<BottomSheetState>(context, listen: false)
-                              .resetLightSteps();
-                          saveData();
-                          setState(() {});
+                    Focus(
+                      child: Shortcuts(
+                        shortcuts: <LogicalKeySet, Intent>{
+                          LogicalKeySet(LogicalKeyboardKey.enter):
+                              const ActivateIntent(),
                         },
-                      ),
-                    ),
-                    RawKeyboardListener(
-                      focusNode: FocusNode(),
-                      onKey: (RawKeyEvent event) {
-                        if (event is RawKeyDownEvent &&
-                            event.data is RawKeyEventDataAndroid) {
-                          RawKeyDownEvent rawKeyDownEvent = event;
-                          RawKeyEventDataAndroid rawKeyEventDataAndroid =
-                              rawKeyDownEvent.data;
-                          if (rawKeyEventDataAndroid.keyCode == 23) {
-                            Provider.of<LightStepState>(context, listen: false)
-                                .initLightStepState(
-                                    Provider.of<BottomSheetState>(context,
-                                            listen: false)
-                                        .lightSteps);
-                            Navigator.pushNamed(context, PlayScreen.page);
-                          }
-                        }
-                      },
-                      child: FloatingActionButton(
-                        focusColor: Colors.black,
-                        heroTag: 'play',
-                        child: Icon(Icons.play_arrow_rounded),
-                        onPressed: () {
-                          Provider.of<LightStepState>(context, listen: false)
-                              .initLightStepState(Provider.of<BottomSheetState>(
-                                      context,
+                        child: Actions(
+                          actions: <Type, Action<Intent>>{
+                            ActivateIntent: CallbackAction<Intent>(
+                              onInvoke: (Intent intent) {
+                                Provider.of<BottomSheetState>(context,
+                                        listen: false)
+                                    .resetLightSteps();
+                                saveData();
+                                setState(() {});
+                              },
+                            ),
+                          },
+                          child: FloatingActionButton(
+                            focusColor: Colors.black,
+                            heroTag: 'reset',
+                            child: Icon(Icons.restore_sharp),
+                            onPressed: () {
+                              Provider.of<BottomSheetState>(context,
                                       listen: false)
-                                  .lightSteps);
-                          Navigator.pushNamed(context, PlayScreen.page);
+                                  .resetLightSteps();
+                              saveData();
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    Focus(
+                      autofocus: true,
+                      child: Shortcuts(
+                        shortcuts: <LogicalKeySet, Intent>{
+                          LogicalKeySet(LogicalKeyboardKey.enter):
+                              const ActivateIntent(),
                         },
+                        child: Actions(
+                          actions: <Type, Action<Intent>>{
+                            ActivateIntent: CallbackAction<Intent>(
+                              onInvoke: (Intent intent) {
+                                Provider.of<LightStepState>(context,
+                                        listen: false)
+                                    .initLightStepState(
+                                        Provider.of<BottomSheetState>(context,
+                                                listen: false)
+                                            .lightSteps);
+                                Navigator.pushNamed(context, PlayScreen.page);
+                              },
+                            ),
+                          },
+                          child: FloatingActionButton(
+                            focusColor: Colors.black,
+                            heroTag: 'play',
+                            child: Icon(Icons.play_arrow_rounded),
+                            onPressed: () {
+                              Provider.of<LightStepState>(context,
+                                      listen: false)
+                                  .initLightStepState(
+                                      Provider.of<BottomSheetState>(context,
+                                              listen: false)
+                                          .lightSteps);
+                              Navigator.pushNamed(context, PlayScreen.page);
+                            },
+                          ),
+                        ),
                       ),
                     ),
                   ],

@@ -3,7 +3,7 @@ description: A new Flutter project.
 version: 2.0.7+9
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.12.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -11,10 +11,10 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
-  circular_countdown: ^0.1.0
-  focusnode_widgets: ^0.0.9
-  provider: ^5.0.0
+  cupertino_icons: ^1.0.8
+  circular_countdown: ^2.1.0
+  # focusnode_widgets: ^0.0.9
+  provider: ^6.1.5
   shared_preferences: ^2.0.5
 
 dev_dependencies:

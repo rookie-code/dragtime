@@ -1,5 +1,4 @@
 import 'package:dragtime/models/lightStep.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BottomSheetState with ChangeNotifier {
@@ -47,6 +46,8 @@ class BottomSheetState with ChangeNotifier {
     if (redState) return Colors.red.value;
     if (yellowState) return Colors.yellow.value;
     if (greenState) return Colors.green.value;
+    // Default to red if none are true, or throw an exception if that's preferred
+    return Colors.red.value;
   }
 
   LightStep get bottomSheetResult {
@@ -84,5 +85,15 @@ class BottomSheetState with ChangeNotifier {
 
   void setLightSteps(List<LightStep> _listLight) {
     lightSteps = _listLight;
+  }
+
+  void updateLightStep(int index, LightStep _lightStep) {
+    lightSteps[index] = _lightStep;
+    notifyListeners();
+  }
+
+  void removeLightStep(int index) {
+    lightSteps.removeAt(index);
+    notifyListeners();
   }
 }
