@@ -17,27 +17,24 @@ class CustomActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Focus(
-      autofocus: true,
-      child: Shortcuts(
-        shortcuts: <LogicalKeySet, Intent>{
-          LogicalKeySet(LogicalKeyboardKey.enter): const ActivateIntent(),
-        },
-        child: Actions(
-          actions: <Type, Action<Intent>>{
-            ActivateIntent: CallbackAction<Intent>(
-              onInvoke: (Intent intent) {
-                onPressed();
-                return null;
-              },
-            ),
-          },
-          child: FloatingActionButton(
-            focusColor: focusColor,
-            heroTag: heroTag,
-            child: Icon(icon),
-            onPressed: onPressed,
+    return Shortcuts(
+      shortcuts: <LogicalKeySet, Intent>{
+        LogicalKeySet(LogicalKeyboardKey.enter): const ActivateIntent(),
+      },
+      child: Actions(
+        actions: <Type, Action<Intent>>{
+          ActivateIntent: CallbackAction<Intent>(
+            onInvoke: (Intent intent) {
+              onPressed();
+              return null;
+            },
           ),
+        },
+        child: FloatingActionButton(
+          focusColor: focusColor,
+          heroTag: heroTag,
+          child: Icon(icon),
+          onPressed: onPressed,
         ),
       ),
     );

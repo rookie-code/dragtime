@@ -60,9 +60,9 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
                   Provider.of<LightStepState>(context, listen: false)
                       .actualColor) ??
               Color(Colors.white.toARGB32()),
-          body: Column(
-            children: <Widget>[
-              Expanded(
+          body: Stack(
+            children: [
+              Center(
                 child: CircularCountdown(
                   textStyle: TextStyle(
                       fontSize: screenHeight * 0.7,
@@ -72,13 +72,13 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
                       Provider.of<LightStepState>(context, listen: false)
                           .actualTimer,
                   countdownTotal: countDownTotal,
-                  diameter: screenHeight * 0.9,
+                  diameter: screenHeight * 0.95,
                   strokeWidth: 20,
                   countdownCurrentColor: Colors.black,
                 ),
               ),
               Container(
-                margin: EdgeInsets.all(20),
+                margin: EdgeInsets.all(5),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -91,7 +91,6 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
                           circleController.forward(from: 60);
                           setState(() {});
                         }),
-
                     SizedBox(
                       width: 10,
                     ),
@@ -104,7 +103,6 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
                               .forwardTimer();
                           setState(() {});
                         }),
-
                     SizedBox(
                       width: 10,
                     ),
@@ -117,30 +115,6 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
                             .changeFase();
                       },
                     ),
-                    // RawKeyboardListener(
-                    //   focusNode: FocusNode(),
-                    //   onKey: (RawKeyEvent event) {
-                    //     if (event is RawKeyDownEvent &&
-                    //         event.data is RawKeyEventDataAndroid) {
-                    //       RawKeyDownEvent rawKeyDownEvent = event;
-                    //       RawKeyEventDataAndroid rawKeyEventDataAndroid =
-                    //           rawKeyDownEvent.data;
-                    //       if (rawKeyEventDataAndroid.keyCode == 23) {
-                    //         Provider.of<LightStepState>(context, listen: false)
-                    //             .changeFase();
-                    //       }
-                    //     }
-                    //   },
-                    //   child: FloatingActionButton(
-                    //     heroTag: 'changeScreen',
-                    //     focusColor: Colors.black,
-                    //     child: Icon(Icons.screen_share),
-                    //     onPressed: () {
-                    //       Provider.of<LightStepState>(context, listen: false)
-                    //           .changeFase();
-                    //     },
-                    //   ),
-                    // ),
                     SizedBox(
                       width: 10,
                     ),

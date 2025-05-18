@@ -5,10 +5,11 @@ import 'package:dragtime/widgets/colorSwitchStateGreen.dart';
 import 'package:dragtime/widgets/colorSwitchStateRed.dart';
 import 'package:dragtime/widgets/colorSwitchStateYellow.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-class MainBottomSheet extends StatelessWidget {
+class MainBottomSheet extends StatefulWidget {
   MainBottomSheet({
     Key? key,
     required this.lightSteps,
@@ -19,6 +20,21 @@ class MainBottomSheet extends StatelessWidget {
   final List<LightStep> lightSteps;
   final Function callback;
   final int? index;
+
+  @override
+  State<MainBottomSheet> createState() => _MainBottomSheetState();
+}
+
+class _MainBottomSheetState extends State<MainBottomSheet> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +49,7 @@ class MainBottomSheet extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  SizedBox(
-                    width: 10,
-                  ),
+                  SizedBox(width: 10),
                   CustomActionButton(
                     focusColor: Colors.black,
                     icon: Icons.arrow_circle_up,
@@ -79,93 +93,84 @@ class MainBottomSheet extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Focus(
-                autofocus: true,
-                child: Shortcuts(
-                  shortcuts: <LogicalKeySet, Intent>{
-                    LogicalKeySet(LogicalKeyboardKey.enter):
-                        const ActivateIntent(),
-                  },
-                  child: Actions(
-                    actions: <Type, Action<Intent>>{
-                      ActivateIntent: CallbackAction<Intent>(
-                        onInvoke: (Intent intent) {
-                          lightSteps.add(Provider.of<BottomSheetState>(context,
-                                  listen: false)
-                              .bottomSheetResult);
+              Shortcuts(
+                shortcuts: <LogicalKeySet, Intent>{
+                  LogicalKeySet(LogicalKeyboardKey.enter):
+                      const ActivateIntent(),
+                },
+                child: Actions(
+                  actions: <Type, Action<Intent>>{
+                    ActivateIntent: CallbackAction<Intent>(
+                      onInvoke: (Intent intent) {
+                        widget.lightSteps.add(Provider.of<BottomSheetState>(
+                                context,
+                                listen: false)
+                            .bottomSheetResult);
 
-                          callback();
-                          Provider.of<BottomSheetState>(context, listen: false)
-                              .setTimer(0);
-                          Navigator.pop(context);
-                        },
-                      ),
-                    },
-                    child: IconButton(
-                      icon: Icon(Icons.check),
-                      focusColor: Colors.black,
-                      onPressed: () {
-                        if (index != null) {
-                          Provider.of<BottomSheetState>(context, listen: false)
-                              .updateLightStep(
-                            index!,
-                            Provider.of<BottomSheetState>(context,
-                                    listen: false)
-                                .bottomSheetResult,
-                          );
-                          callback();
-                          Provider.of<BottomSheetState>(context, listen: false)
-                              .setTimer(0);
-                          Navigator.pop(context);
-                        } else {
-                          lightSteps.add(Provider.of<BottomSheetState>(context,
-                                  listen: false)
-                              .bottomSheetResult);
-
-                          callback();
-                          Provider.of<BottomSheetState>(context, listen: false)
-                              .setTimer(0);
-                          Navigator.pop(context);
-                        }
+                        widget.callback();
+                        Provider.of<BottomSheetState>(context, listen: false)
+                            .setTimer(0);
+                        Navigator.pop(context);
                       },
                     ),
+                  },
+                  child: IconButton(
+                    icon: Icon(Icons.check),
+                    onPressed: () {
+                      if (widget.index != null) {
+                        Provider.of<BottomSheetState>(context, listen: false)
+                            .updateLightStep(
+                          widget.index!,
+                          Provider.of<BottomSheetState>(context, listen: false)
+                              .bottomSheetResult,
+                        );
+                        widget.callback();
+                        Provider.of<BottomSheetState>(context, listen: false)
+                            .setTimer(0);
+                        Navigator.pop(context);
+                      } else {
+                        widget.lightSteps.add(Provider.of<BottomSheetState>(
+                                context,
+                                listen: false)
+                            .bottomSheetResult);
+
+                        widget.callback();
+                        Provider.of<BottomSheetState>(context, listen: false)
+                            .setTimer(0);
+                        Navigator.pop(context);
+                      }
+                    },
                   ),
                 ),
               ),
-              Focus(
-                autofocus: true,
-                child: Shortcuts(
-                  shortcuts: <LogicalKeySet, Intent>{
-                    LogicalKeySet(LogicalKeyboardKey.enter):
-                        const ActivateIntent(),
-                  },
-                  child: Actions(
-                    actions: <Type, Action<Intent>>{
-                      ActivateIntent: CallbackAction<Intent>(
-                        onInvoke: (Intent intent) {
-                          if (index != null) {
-                            Provider.of<BottomSheetState>(context,
-                                    listen: false)
-                                .removeLightStep(index!);
-                            callback();
-                          }
-                          Navigator.pop(context);
-                        },
-                      ),
-                    },
-                    child: IconButton(
-                      icon: Icon(Icons.delete),
-                      focusNode: FocusNode(),
-                      focusColor: Colors.black,
-                      onPressed: () {
-                        if (index != null) {
+              Shortcuts(
+                shortcuts: <LogicalKeySet, Intent>{
+                  LogicalKeySet(LogicalKeyboardKey.enter):
+                      const ActivateIntent(),
+                },
+                child: Actions(
+                  actions: <Type, Action<Intent>>{
+                    ActivateIntent: CallbackAction<Intent>(
+                      onInvoke: (Intent intent) {
+                        if (widget.index != null) {
                           Provider.of<BottomSheetState>(context, listen: false)
-                              .removeLightStep(index!);
-                          callback();
+                              .removeLightStep(widget.index!);
+                          widget.callback();
                         }
                         Navigator.pop(context);
                       },
                     ),
+                  },
+                  child: IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () {
+                      if (widget.index != null) {
+                        Provider.of<BottomSheetState>(context, listen: false)
+                            .removeLightStep(widget.index!);
+                        widget.callback();
+                      }
+                      Navigator.pop(context);
+                    },
                   ),
                 ),
               ),

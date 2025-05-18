@@ -17,30 +17,27 @@ class ColorSwitchYellow extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ),
-        Focus(
-          autofocus: true,
-          child: Shortcuts(
-            shortcuts: <LogicalKeySet, Intent>{
-              LogicalKeySet(LogicalKeyboardKey.enter): const ActivateIntent(),
-            },
-            child: Actions(
-              actions: <Type, Action<Intent>>{
-                ActivateIntent: CallbackAction<Intent>(
-                  onInvoke: (Intent intent) {
-                    Provider.of<BottomSheetState>(context, listen: false)
-                        .changeToYellowState();
-                  },
-                ),
-              },
-              child: Switch(
-                activeColor: Colors.yellow,
-                inactiveTrackColor: Colors.grey,
-                value: _actualState,
-                onChanged: (bool val) {
+        Shortcuts(
+          shortcuts: <LogicalKeySet, Intent>{
+            LogicalKeySet(LogicalKeyboardKey.enter): const ActivateIntent(),
+          },
+          child: Actions(
+            actions: <Type, Action<Intent>>{
+              ActivateIntent: CallbackAction<Intent>(
+                onInvoke: (Intent intent) {
                   Provider.of<BottomSheetState>(context, listen: false)
                       .changeToYellowState();
                 },
               ),
+            },
+            child: Switch(
+              activeColor: Colors.yellow,
+              inactiveTrackColor: Colors.grey,
+              value: _actualState,
+              onChanged: (bool val) {
+                Provider.of<BottomSheetState>(context, listen: false)
+                    .changeToYellowState();
+              },
             ),
           ),
         ),
