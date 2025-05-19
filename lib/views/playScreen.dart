@@ -84,7 +84,7 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     CustomActionButton(
-                        focusColor: Colors.black,
+                        focusColor: Colors.blueAccent,
                         heroTag: 'less',
                         icon: Icons.remove,
                         onPressed: () {
@@ -95,7 +95,7 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
                       width: 10,
                     ),
                     CustomActionButton(
-                        focusColor: Colors.black,
+                        focusColor: Colors.blueAccent,
                         heroTag: 'add',
                         icon: Icons.add,
                         onPressed: () {
@@ -107,7 +107,7 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
                       width: 10,
                     ),
                     CustomActionButton(
-                      focusColor: Colors.black,
+                      focusColor: Colors.blueAccent,
                       heroTag: 'changeScreen',
                       icon: Icons.screen_share,
                       onPressed: () {
@@ -119,7 +119,7 @@ class _PlayScreenState extends State<PlayScreen> with TickerProviderStateMixin {
                       width: 10,
                     ),
                     CustomActionButton(
-                        focusColor: Colors.black,
+                        focusColor: Colors.blueAccent,
                         heroTag: 'backHome',
                         icon: Icons.home,
                         onPressed: () {

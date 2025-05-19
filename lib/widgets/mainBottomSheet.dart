@@ -51,7 +51,7 @@ class _MainBottomSheetState extends State<MainBottomSheet> {
                 children: [
                   SizedBox(width: 10),
                   CustomActionButton(
-                    focusColor: Colors.black,
+                    focusColor: Colors.blueAccent,
                     icon: Icons.arrow_circle_up,
                     onPressed: () {
                       Provider.of<BottomSheetState>(context, listen: false)
@@ -71,7 +71,7 @@ class _MainBottomSheetState extends State<MainBottomSheet> {
                     ),
                   ),
                   CustomActionButton(
-                    focusColor: Colors.black,
+                    focusColor: Colors.blueAccent,
                     icon: Icons.arrow_circle_down,
                     onPressed: () {
                       Provider.of<BottomSheetState>(context, listen: false)

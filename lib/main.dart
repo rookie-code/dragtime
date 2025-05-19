@@ -118,7 +118,7 @@ class _MainMenuState extends State<MainMenu> {
                 child: Provider.of<BottomSheetState>(context, listen: false)
                         .lightSteps
                         .isEmpty
-                    ? Center(child: Text('empty list'))
+                    ? Center(child: Text(''))
                     : ListView.builder(
                         itemBuilder: (context, index) {
                           return Card(
@@ -189,7 +189,7 @@ class _MainMenuState extends State<MainMenu> {
                           ),
                         },
                         child: FloatingActionButton(
-                          focusColor: Colors.black,
+                          focusColor: Colors.blueAccent,
                           heroTag: 'addLight',
                           child: Icon(Icons.add),
                           onPressed: () {
@@ -219,7 +219,7 @@ class _MainMenuState extends State<MainMenu> {
                           ),
                         },
                         child: FloatingActionButton(
-                          focusColor: Colors.black,
+                          focusColor: Colors.blueAccent,
                           heroTag: 'reset',
                           child: Icon(Icons.restore_sharp),
                           onPressed: () {
@@ -252,7 +252,7 @@ class _MainMenuState extends State<MainMenu> {
                           ),
                         },
                         child: FloatingActionButton(
-                          focusColor: Colors.black,
+                          focusColor: Colors.blueAccent,
                           heroTag: 'play',
                           child: Icon(Icons.play_arrow_rounded),
                           onPressed: () {
